@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "6jHR3gHGIQE=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\joshu\\OneDrive\\Documents\\CSharp Learning\\try-catch\\Try-Catch-Masters-Project\\Try-Catch-Masters-Project.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\joshu\\.nuget\\packages\\microsoft.aspnetcore.app.internal.assets\\10.0.3\\microsoft.aspnetcore.app.internal.assets.10.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
