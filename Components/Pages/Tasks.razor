@@ -1,0 +1,336 @@
+@page "/tasks"
+@rendermode InteractiveServer
+
+<PageTitle>Tasks</PageTitle>
+
+<div class="tasks-page">
+    <div class="hero-section shadow-sm">
+        <div>
+            <p class="section-label">PRODUCTIVITY APP</p>
+            <h1>Organize your day with confidence</h1>
+            <p class="hero-text">
+                A simple and elegant task manager for planning, tracking, and completing your daily work.
+            </p>
+        </div>
+
+        <div class="hero-stats">
+            <div class="stat-card">
+                <span class="stat-number">@tasks.Count</span>
+                <span class="stat-label">Total Tasks</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">@tasks.Count(t => t.IsDone)</span>
+                <span class="stat-label">Completed</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">@tasks.Count(t => !t.IsDone)</span>
+                <span class="stat-label">Pending</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-card shadow-sm">
+        <div class="card-header-custom">
+            <div>
+                <h2>Task Manager</h2>
+                <p>Create, track, and complete your tasks in one place.</p>
+            </div>
+        </div>
+
+        <div class="add-task-section">
+            <div class="input-group input-group-lg">
+                <input class="form-control"
+                       @bind="newTask"
+                       @bind:event="oninput"
+                       placeholder="Enter a new task..." />
+                <button class="btn btn-primary px-4" @onclick="AddTask">Add Task</button>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <button class="btn @(currentFilter == "All" ? "btn-dark" : "btn-outline-dark") me-2" @onclick='() => SetFilter("All")'>All</button>
+            <button class="btn @(currentFilter == "Pending" ? "btn-warning" : "btn-outline-warning") me-2" @onclick='() => SetFilter("Pending")'>Pending</button>
+<button class="btn @(currentFilter == "Completed" ? "btn-success" : "btn-outline-success")" @onclick='() => SetFilter("Completed")'>Completed</button>        </div>
+
+        @if (FilteredTasks.Any())
+        {
+            <div class="task-list">
+                @foreach (var task in FilteredTasks)
+                {
+                    <div class="task-item @(task.IsDone ? "task-done" : "")">
+                        <div class="task-left">
+                            <input type="checkbox"
+                                   class="form-check-input custom-checkbox"
+                                   @bind="task.IsDone" />
+
+                            <div class="task-text">
+                                <h5>@task.Name</h5>
+                                <span>@(task.IsDone ? "Completed task" : "Pending task")</span>
+                            </div>
+                        </div>
+
+                        <div class="task-actions">
+                            @if (task.IsDone)
+                            {
+                                <span class="badge bg-success">Done</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">In Progress</span>
+                            }
+
+                            <button class="btn btn-sm btn-outline-danger ms-3" @onclick="() => DeleteTask(task)">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <h4>No tasks found</h4>
+                <p>Try adding a new task or changing the filter.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .tasks-page {
+        padding: 2rem;
+        background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+        min-height: 100vh;
+    }
+
+    .hero-section {
+        background: linear-gradient(135deg, #1e3a8a, #4f46e5);
+        color: white;
+        border-radius: 24px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .section-label {
+        font-size: 0.8rem;
+        letter-spacing: 0.12rem;
+        font-weight: 700;
+        opacity: 0.8;
+        margin-bottom: 0.5rem;
+    }
+
+    .hero-section h1 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+    }
+
+    .hero-text {
+        max-width: 600px;
+        font-size: 1rem;
+        opacity: 0.95;
+        margin-bottom: 0;
+    }
+
+    .hero-stats {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: stretch;
+    }
+
+    .stat-card {
+        background: rgba(255,255,255,0.14);
+        backdrop-filter: blur(6px);
+        border-radius: 18px;
+        padding: 1rem 1.25rem;
+        min-width: 130px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .stat-number {
+        font-size: 1.8rem;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        margin-top: 0.25rem;
+    }
+
+    .main-card {
+        background: white;
+        border-radius: 24px;
+        padding: 2rem;
+    }
+
+    .card-header-custom h2 {
+        margin-bottom: 0.25rem;
+        font-weight: 700;
+    }
+
+    .card-header-custom p {
+        color: #6b7280;
+        margin-bottom: 1.5rem;
+    }
+
+    .add-task-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .filter-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .task-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .task-item {
+        border: 1px solid #e5e7eb;
+        border-radius: 18px;
+        padding: 1rem 1.25rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        background: #ffffff;
+        transition: all 0.2s ease;
+    }
+
+    .task-item:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    .task-done {
+        background: #f0fdf4;
+        border-color: #bbf7d0;
+    }
+
+    .task-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .custom-checkbox {
+        width: 1.2rem;
+        height: 1.2rem;
+    }
+
+    .task-text h5 {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 600;
+    }
+
+    .task-done .task-text h5 {
+        text-decoration: line-through;
+        color: #6b7280;
+    }
+
+    .task-text span {
+        font-size: 0.9rem;
+        color: #6b7280;
+    }
+
+    .task-actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        color: #6b7280;
+        border: 2px dashed #d1d5db;
+        border-radius: 18px;
+        background: #f9fafb;
+    }
+
+    @@media (max-width: 768px) {
+        .tasks-page {
+            padding: 1rem;
+        }
+
+        .hero-section {
+            padding: 1.5rem;
+        }
+
+        .hero-section h1 {
+            font-size: 1.7rem;
+        }
+
+        .main-card {
+            padding: 1.25rem;
+        }
+
+        .task-item {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .task-actions {
+            width: 100%;
+            justify-content: space-between;
+        }
+    }
+</style>
+
+@code {
+    string newTask = "";
+    string currentFilter = "All";
+
+    List<TaskItem> tasks = new()
+    {
+        new TaskItem { Name = "Create project structure", IsDone = true },
+        new TaskItem { Name = "Build task management page", IsDone = false },
+        new TaskItem { Name = "Prepare app for team review", IsDone = false }
+    };
+
+    IEnumerable<TaskItem> FilteredTasks =>
+        currentFilter switch
+        {
+            "Pending" => tasks.Where(t => !t.IsDone),
+            "Completed" => tasks.Where(t => t.IsDone),
+            _ => tasks
+        };
+
+    void AddTask()
+    {
+        if (!string.IsNullOrWhiteSpace(newTask))
+        {
+            tasks.Insert(0, new TaskItem { Name = newTask.Trim(), IsDone = false });
+            newTask = "";
+        }
+    }
+
+    void DeleteTask(TaskItem task)
+    {
+        tasks.Remove(task);
+    }
+
+    void SetFilter(string filter)
+    {
+        currentFilter = filter;
+    }
+
+    class TaskItem
+    {
+        public string Name { get; set; } = "";
+        public bool IsDone { get; set; }
+    }
+}
