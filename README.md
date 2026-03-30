@@ -72,4 +72,4 @@ dotnet tool install --global dotnet-ef
 ## Notes
 - Never commit secrets or connection strings with passwords.
 - Each developer has their own local SQLite database — run migrations after pulling new changes.
-- If you teammate add a new migration, pull and run `dotnet ef database update` to stay in sync.
+- If you add a new migration, pull and run `dotnet ef database update` to stay in sync.
