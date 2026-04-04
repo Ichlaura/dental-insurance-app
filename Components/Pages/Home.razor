@@ -2,6 +2,71 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+@* ========== HERO SECTION ========== *@
+<div class="text-white text-center d-flex align-items-center justify-content-center"
+     style="min-height: 85vh; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);">
+    <div class="px-3">
+        <h1 class="display-3 fw-bold mb-3">Task It</h1>
+        <p class="lead mb-4" style="max-width: 600px; margin: 0 auto; opacity: 0.85;">
+            Stay on top of your tasks, one catch at a time.
+        </p>
 
-Welcome to your new app.
+        <AuthorizeView>
+            <Authorized>
+                <a href="/tasks" class="btn btn-light btn-lg px-5 py-3 shadow fw-semibold">
+                    Go to Tasks
+                </a>
+            </Authorized>
+            <NotAuthorized>
+                <a href="/login" class="btn btn-light btn-lg px-5 py-3 shadow fw-semibold">
+                    Get Started
+                </a>
+            </NotAuthorized>
+        </AuthorizeView>
+    </div>
+</div>
+
+@* ========== FEATURES SECTION ========== *@
+<div class="container py-5">
+    <h2 class="text-center fw-bold mb-2">Simple Task Management</h2>
+    <p class="text-center text-muted mb-5" style="max-width: 600px; margin: 0 auto;">
+        No clutter, no complexity. Just a clean space to organize your day-to-day responsibilities.
+    </p>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm text-center p-4">
+                <div class="mb-3" style="font-size: 2.5rem;">&#10003;</div>
+                <h5 class="fw-bold">Create &amp; Manage</h5>
+                <p class="text-muted">Add tasks quickly, edit them when plans change, and delete what you no longer need.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm text-center p-4">
+                <div class="mb-3" style="font-size: 2.5rem;">&#9881;</div>
+                <h5 class="fw-bold">Track Progress</h5>
+                <p class="text-muted">Mark tasks as completed and filter between what's done and what's still on your plate.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm text-center p-4">
+                <div class="mb-3" style="font-size: 2.5rem;">&#128274;</div>
+                <h5 class="fw-bold">Secure &amp; Private</h5>
+                <p class="text-muted">Your tasks are yours alone. Log in securely and only see your own data.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* ========== TAGLINE SECTION ========== *@
+<div class="text-center py-5" style="background-color: #f8f9fa;">
+    <h3 class="fw-bold mb-3">Built for people who want simplicity</h3>
+    <p class="text-muted mb-4" style="max-width: 550px; margin: 0 auto;">
+        So many task apps are overcomplicated. Task It keeps it user-friendly so you can focus on what matters.
+    </p>
+    <AuthorizeView>
+        <NotAuthorized>
+            <a href="/register" class="btn btn-primary px-4 py-2">Create Your Account</a>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>

@@ -1,6 +1,17 @@
-  Joshua Mostert  
+# Task It
 
-  Cherry Wilmer Machado Carreno
+A simple, user-friendly task management app built with Blazor and ASP.NET Core Identity.
+
+**Team:** Joshua Mostert, Cherry Wilmer Machado Carreno
+
+---
+
+## Tech Stack
+
+- **Framework:** ASP.NET Core / Blazor Server (.NET 10)
+- **Auth:** ASP.NET Core Identity (cookie-based)
+- **Database:** SQLite (via Entity Framework Core)
+- **Styling:** Bootstrap 5
 
 ---
 
@@ -30,13 +41,27 @@ dotnet tool install --global dotnet-ef
    dotnet restore
    ```
 
-3. **Apply database migrations**  
+3. **Create your local dev settings**  
+   Create a file called `appsettings.Development.json` in the project root with:
+   ```json
+   {
+     "DetailedErrors": true,
+     "Logging": {
+       "LogLevel": {
+         "Default": "Information",
+         "Microsoft.AspNetCore": "Warning"
+       }
+     }
+   }
+   ```
+
+4. **Apply database migrations**  
    This creates your local `app.db` SQLite database with all the required tables.
    ```
    dotnet ef database update
    ```
 
-4. **Run the app**
+5. **Run the app**
    ```
    dotnet watch
    ```
@@ -44,7 +69,7 @@ dotnet tool install --global dotnet-ef
 
 ---
 
-### Notes
-- `appsettings.Development.json` is excluded from Git — each developer has their own local copy.
-- The SQLite database (`app.db`) is also excluded — run `dotnet ef database update` to generate it locally.
-- Never commit secrets or connection strings with passwords to the repo.
+## Notes
+- Never commit secrets or connection strings with passwords.
+- Each developer has their own local SQLite database — run migrations after pulling new changes.
+- If you add a new migration, pull and run `dotnet ef database update` to stay in sync.
