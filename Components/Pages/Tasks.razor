@@ -1,43 +1,433 @@
 @page "/tasks"
 @rendermode InteractiveServer
 
-<PageTitle>Dental Insurance App</PageTitle>
+<PageTitle>Dental Insurance Verification</PageTitle>
 
-<h1>Dental Insurance App</h1>
+<div class="insurance-page">
+    <section class="hero shadow-sm">
+        <div>
+            <p class="eyebrow">DENTAL INSURANCE VERIFICATION</p>
+            <h1>Manage patient insurance records with confidence</h1>
+            <p class="hero-text">
+                A clean and professional dashboard for tracking verification status, patient details,
+                and insurance information in one place.
+            </p>
+        </div>
 
-<div style="margin-bottom:20px;">
-    <input @bind="newPatient" placeholder="Patient Name" />
-    <input @bind="newInsurance" placeholder="Insurance" />
-    <input @bind="newGroup" placeholder="Group #" />
-    <button @onclick="AddRecord">Add</button>
+        <div class="hero-stats">
+            <div class="stat-card">
+                <span class="stat-number">@records.Count</span>
+                <span class="stat-label">Total Records</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">@records.Count(r => r.Verified)</span>
+                <span class="stat-label">Verified</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">@records.Count(r => !r.Verified)</span>
+                <span class="stat-label">Pending</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-grid">
+        <div class="form-card shadow-sm">
+            <div class="section-header">
+                <h2>Add Insurance Record</h2>
+                <p>Enter patient information and save a new verification record.</p>
+            </div>
+
+            <div class="form-grid">
+                <div>
+                    <label>Patient Name</label>
+                    <input class="form-control @(string.IsNullOrWhiteSpace(newPatient) ? "input-warning" : "")"
+                           @bind="newPatient"
+                           placeholder="e.g. Maria Lopez" />
+                </div>
+
+                <div>
+                    <label>Insurance Provider</label>
+                    <input class="form-control @(string.IsNullOrWhiteSpace(newInsurance) ? "input-warning" : "")"
+                           @bind="newInsurance"
+                           placeholder="e.g. Aetna" />
+                </div>
+
+                <div>
+                    <label>Group Number</label>
+                    <input class="form-control @(string.IsNullOrWhiteSpace(newGroup) ? "input-warning" : "")"
+                           @bind="newGroup"
+                           placeholder="e.g. AET-2049" />
+                </div>
+            </div>
+
+            <div class="button-row">
+                <button class="btn btn-primary btn-lg px-4" @onclick="AddRecord">Add Record</button>
+            </div>
+        </div>
+
+        <div class="info-card shadow-sm">
+            <div class="section-header">
+                <h2>Quick Overview</h2>
+                <p>This application helps organize insurance verification for dental offices.</p>
+            </div>
+
+            <ul class="info-list">
+                <li>Create new patient insurance records</li>
+                <li>Mark records as verified or pending</li>
+                <li>Delete outdated records</li>
+                <li>Filter records by status</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="table-card shadow-sm">
+        <div class="table-header">
+            <div>
+                <h2>Insurance Records</h2>
+                <p>Track verification progress for all patient records.</p>
+            </div>
+
+            <div class="filter-group">
+                <button class="btn @(currentFilter == "All" ? "btn-dark" : "btn-outline-dark")"
+                        @onclick='() => SetFilter("All")'>All</button>
+
+                <button class="btn @(currentFilter == "Pending" ? "btn-warning" : "btn-outline-warning")"
+                        @onclick='() => SetFilter("Pending")'>Pending</button>
+
+                <button class="btn @(currentFilter == "Verified" ? "btn-success" : "btn-outline-success")"
+                        @onclick='() => SetFilter("Verified")'>Verified</button>
+            </div>
+        </div>
+
+        @if (FilteredRecords.Any())
+        {
+            <div class="records-list">
+                @foreach (var item in FilteredRecords)
+                {
+                    <div class="record-row @(item.Verified ? "record-verified" : "")">
+                        <div class="record-main">
+                            <div class="checkbox-wrap">
+                                <input type="checkbox"
+                                       class="form-check-input record-checkbox"
+                                       checked="@item.Verified"
+                                       @onchange="() => Toggle(item)" />
+                            </div>
+
+                            <div class="record-text">
+                                <h5>@item.Patient</h5>
+                                <p>@item.Insurance</p>
+                                <span>Group Number: @item.Group</span>
+                            </div>
+                        </div>
+
+                        <div class="record-actions">
+                            @if (item.Verified)
+                            {
+                                <span class="badge rounded-pill text-bg-success">Verified</span>
+                            }
+                            else
+                            {
+                                <span class="badge rounded-pill text-bg-warning text-dark">Pending</span>
+                            }
+
+                            <button class="btn btn-sm btn-outline-danger" @onclick="() => Delete(item)">Delete</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <h4>No records found</h4>
+                <p>Add your first insurance record to get started.</p>
+            </div>
+        }
+    </section>
 </div>
 
-<div style="margin-bottom:20px;">
-    <button @onclick='() => SetFilter("All")'>All</button>
-    <button @onclick='() => SetFilter("Pending")'>Pending</button>
-    <button @onclick='() => SetFilter("Verified")'>Verified</button>
-</div>
-
-<ul>
-    @foreach (var item in FilteredRecords)
-    {
-        <li>
-            <input type="checkbox" checked="@item.Verified" @onchange="() => Toggle(item)" />
-            <b>@item.Patient</b> - @item.Insurance (Group: @item.Group)
-
-            @if (item.Verified)
-            {
-                <span style="color:green;">✔ Verified</span>
-            }
-            else
-            {
-                <span style="color:orange;">Pending</span>
-            }
-
-            <button @onclick="() => Delete(item)">Delete</button>
-        </li>
+<style>
+    .insurance-page {
+        min-height: 100vh;
+        padding: 2rem;
+        background:
+            radial-gradient(circle at top left, #eff6ff 0%, transparent 30%),
+            linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
     }
-</ul>
+
+    .hero {
+        background: linear-gradient(135deg, #0f172a, #1d4ed8);
+        color: white;
+        border-radius: 28px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .eyebrow {
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.14rem;
+        opacity: 0.8;
+        margin-bottom: 0.65rem;
+    }
+
+    .hero h1 {
+        font-size: 2.3rem;
+        font-weight: 800;
+        line-height: 1.15;
+        margin-bottom: 0.8rem;
+        max-width: 720px;
+    }
+
+    .hero-text {
+        max-width: 680px;
+        font-size: 1rem;
+        opacity: 0.95;
+        margin: 0;
+    }
+
+    .hero-stats {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: stretch;
+    }
+
+    .stat-card {
+        min-width: 140px;
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.15);
+        backdrop-filter: blur(6px);
+        border-radius: 20px;
+        padding: 1rem 1.25rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .stat-number {
+        font-size: 1.9rem;
+        font-weight: 800;
+        line-height: 1.1;
+    }
+
+    .stat-label {
+        font-size: 0.92rem;
+        margin-top: 0.25rem;
+        opacity: 0.9;
+    }
+
+    .content-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-card,
+    .info-card,
+    .table-card {
+        background: white;
+        border-radius: 24px;
+        padding: 1.75rem;
+    }
+
+    .section-header h2,
+    .table-header h2 {
+        margin-bottom: 0.35rem;
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .section-header p,
+    .table-header p {
+        margin-bottom: 1.25rem;
+        color: #64748b;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+
+    .form-grid label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #334155;
+        margin-bottom: 0.45rem;
+    }
+
+    .form-grid .form-control {
+        height: 48px;
+        border-radius: 14px;
+        border: 1px solid #cbd5e1;
+        box-shadow: none;
+    }
+
+    .form-grid .form-control:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.12);
+    }
+
+    .input-warning {
+        border: 1px solid #f59e0b !important;
+        background: #fffbeb;
+    }
+
+    .button-row {
+        margin-top: 1.25rem;
+    }
+
+    .info-list {
+        margin: 0;
+        padding-left: 1.1rem;
+        color: #334155;
+    }
+
+    .info-list li {
+        margin-bottom: 0.75rem;
+    }
+
+    .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.25rem;
+    }
+
+    .filter-group {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .records-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .record-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        transition: 0.2s ease;
+        background: #fff;
+    }
+
+    .record-row:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    .record-verified {
+        background: #f0fdf4;
+        border-color: #bbf7d0;
+    }
+
+    .record-main {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .checkbox-wrap {
+        display: flex;
+        align-items: center;
+    }
+
+    .record-checkbox {
+        width: 1.2rem;
+        height: 1.2rem;
+    }
+
+    .record-text h5 {
+        margin: 0 0 0.2rem 0;
+        font-size: 1.06rem;
+        font-weight: 700;
+        color: #0f172a;
+    }
+
+    .record-text p {
+        margin: 0 0 0.15rem 0;
+        color: #334155;
+        font-weight: 500;
+    }
+
+    .record-text span {
+        color: #64748b;
+        font-size: 0.92rem;
+    }
+
+    .record-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem 1rem;
+        border: 2px dashed #cbd5e1;
+        border-radius: 20px;
+        background: #f8fafc;
+        color: #64748b;
+    }
+
+    @@media (max-width: 992px) {
+        .content-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .insurance-page {
+            padding: 1rem;
+        }
+
+        .hero {
+            padding: 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: 1.7rem;
+        }
+
+        .form-card,
+        .info-card,
+        .table-card {
+            padding: 1.25rem;
+        }
+
+        .record-row {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .record-actions {
+            width: 100%;
+            justify-content: space-between;
+        }
+    }
+</style>
 
 @code {
     string newPatient = "";
@@ -45,7 +435,12 @@
     string newGroup = "";
     string currentFilter = "All";
 
-    List<Record> records = new();
+    List<Record> records = new()
+    {
+        new Record { Patient = "Maria Lopez", Insurance = "Aetna", Group = "AET-2049", Verified = true },
+        new Record { Patient = "John Smith", Insurance = "Cigna", Group = "CGN-3318", Verified = false },
+        new Record { Patient = "Ana Torres", Insurance = "Delta Dental", Group = "DDL-7782", Verified = false }
+    };
 
     IEnumerable<Record> FilteredRecords =>
         currentFilter switch
@@ -57,13 +452,16 @@
 
     void AddRecord()
     {
-        if (!string.IsNullOrWhiteSpace(newPatient))
+        if (!string.IsNullOrWhiteSpace(newPatient) &&
+            !string.IsNullOrWhiteSpace(newInsurance) &&
+            !string.IsNullOrWhiteSpace(newGroup))
         {
-            records.Add(new Record
+            records.Insert(0, new Record
             {
-                Patient = newPatient,
-                Insurance = newInsurance,
-                Group = newGroup
+                Patient = newPatient.Trim(),
+                Insurance = newInsurance.Trim(),
+                Group = newGroup.Trim(),
+                Verified = false
             });
 
             newPatient = "";

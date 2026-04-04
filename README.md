@@ -1,75 +1,70 @@
-# Task It
+# Dental Insurance Verification App
 
-A simple, user-friendly task management app built with Blazor and ASP.NET Core Identity.
+A web application built with Blazor to manage dental insurance verification records for patients.
 
-**Team:** Joshua Mostert, Cherry Wilmer Machado Carreno
+**Author:** Laura Nunez
 
 ---
 
 ## Tech Stack
 
-- **Framework:** ASP.NET Core / Blazor Server (.NET 10)
-- **Auth:** ASP.NET Core Identity 
-- **Database:** SQLite 
-- **Styling:** Bootstrap 5
+- Framework: ASP.NET Core / Blazor Server (.NET)
+- Database: In-memory (can be upgraded to SQLite)
+- Styling: Bootstrap
+
+---
+
+## Features
+
+- Add new insurance verification records
+- Mark records as Verified or Pending
+- Delete records
+- Filter by status (All / Pending / Verified)
+- Simple and clean UI
+
+---
+
+## Purpose
+
+This project was developed as part of a software development course.  
+It simulates a real-world tool used in dental clinics to verify patient insurance information.
 
 ---
 
 ## Getting Started
 
-### Prerequisites
-- [.NET 10 SDK](https://dotnet.microsoft.com/download)
-- [dotnet-ef CLI tool](https://learn.microsoft.com/en-us/ef/core/cli/dotnet)
+### 1. Clone the repository
 
-Install the EF CLI tool if you don't have it:
-```
-dotnet tool install --global dotnet-ef
-```
+git clone https://github.com/Ichlaura/dental-insurance-app.git  
+cd dental-insurance-app
 
----
+### 2. Run the project
 
-### Setup
+dotnet run
 
-1. **Clone the repo**
-   ```
-   git clone <repo-url>
-   cd try-catch/Try-Catch-Masters-Project
-   ```
+Then open in your browser:
 
-2. **Restore dependencies**
-   ```
-   dotnet restore
-   ```
-
-3. **Create your local dev settings**  
-   Create a file called `appsettings.Development.json` in the project root with:
-   ```json
-   {
-     "DetailedErrors": true,
-     "Logging": {
-       "LogLevel": {
-         "Default": "Information",
-         "Microsoft.AspNetCore": "Warning"
-       }
-     }
-   }
-   ```
-
-4. **Apply database migrations**  
-   This creates your local `app.db` SQLite database with all the required tables.
-   ```
-   dotnet ef database update
-   ```
-
-5. **Run the app**
-   ```
-   dotnet watch
-   ```
-   The app will be available at `https://localhost:5001` (or the port shown in the terminal).
+http://localhost:5214  
+(or the port shown in your terminal)
 
 ---
 
-## Notes
-- Never commit secrets or connection strings with passwords.
-- Each developer has their own local SQLite database — run migrations after pulling new changes.
-- If you add a new migration, pull and run `dotnet ef database update` to stay in sync.
+## Future Improvements
+
+- Add user authentication (login/register)
+- Connect to a real database (SQLite or PostgreSQL)
+- Deploy to cloud (Azure / Render)
+- Add auto-fill for insurance providers
+- Improve UI/UX
+
+---
+
+## Project Status
+
+Functional and ready for demonstration.
+
+---
+
+## Author
+
+Laura Nunez
