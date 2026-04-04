@@ -1,36 +1,5 @@
-<<<<<<< HEAD
 bin/
 obj/
-app.db
-appsettings.Development.json
 .vs/
 *.user
 *.suo
-=======
-## .NET / Blazor
-bin/
-obj/
-*.user
-*.suo
-*.userosscache
-*.sln.docstates
-
-## SQLite database (generated locally via migrations)
-app.db
-app.db-shm
-app.db-wal
-
-## IDE / Editor
-.vs/
-.vscode/
-*.swp
-*~
-
-## OS files
-Thumbs.db
-Desktop.ini
-.DS_Store
-
-## Secrets / environment overrides
-appsettings.Development.json
->>>>>>> 6d0e4bbb83ddd912d77358c62f66efbcffa81e71

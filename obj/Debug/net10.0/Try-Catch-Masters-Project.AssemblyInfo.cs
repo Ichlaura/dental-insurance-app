@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Try-Catch-Masters-Project")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+25dc77c58e58c218551d5b44f57afc3d0815a3ff")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+df954f8454b95c6dbb415194140d28067617912e")]
 [assembly: System.Reflection.AssemblyProductAttribute("Try-Catch-Masters-Project")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Try-Catch-Masters-Project")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
