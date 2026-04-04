@@ -9,8 +9,8 @@ A simple, user-friendly task management app built with Blazor and ASP.NET Core I
 ## Tech Stack
 
 - **Framework:** ASP.NET Core / Blazor Server (.NET 10)
-- **Auth:** ASP.NET Core Identity (cookie-based)
-- **Database:** SQLite (via Entity Framework Core)
+- **Auth:** ASP.NET Core Identity 
+- **Database:** SQLite 
 - **Styling:** Bootstrap 5
 
 ---
